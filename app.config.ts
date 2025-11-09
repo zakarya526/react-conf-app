@@ -1,29 +1,25 @@
 import { ExpoConfig } from "expo/config";
 // Update this value to something unique in order to be able to build for a
 // physical iOS device.
-const APP_ID_PREFIX = "com.reactconf";
+const APP_ID_PREFIX = "com.saud122.reactconf";
 
 // These values are tied to EAS. If you would like to use EAS Build or Update
 // on this project while playing with it, then remove these values and run
 // `eas init` and `eas update:configure` to get new values for your account.
 const EAS_UPDATE_URL =
-  "https://u.expo.dev/66251e1b-0290-4ef8-87a4-e533cac914dd";
-const EAS_PROJECT_ID = "66251e1b-0290-4ef8-87a4-e533cac914dd";
-const EAS_APP_OWNER = "expo";
+  "https://u.expo.dev/8ee254b2-d538-4db3-849a-e3039bb72849";
+const EAS_PROJECT_ID = "8ee254b2-d538-4db3-849a-e3039bb72849";
+const EAS_APP_OWNER = "saud122";
 
 const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
 const getName = () => {
   if (IS_DEV) {
-    return "React Conf (Dev)";
+    return "Saud React Conf (Dev)";
   }
 
-  if (IS_PREVIEW) {
-    return "React Conf (Prev)";
-  }
-
-  return "React Conf";
+  return "Saud React Conf";
 };
 
 const getAppId = () => {
