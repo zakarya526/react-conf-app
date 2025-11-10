@@ -3,15 +3,29 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 type BookmarkState = {
-  bookmarks: { sessionId: string; notificationId?: string }[];
-  toggleBookmarked: (sessionId: string, notificationId?: string) => void;
+  bookmarks: {
+    sessionId: string;
+    notificationId?: string;
+    offsetMinutes?: number;
+  }[];
+  toggleBookmarked: (
+    sessionId: string,
+    notificationId?: string,
+    offsetMinutes?: number,
+  ) => void;
+  setReminderOffset: (sessionId: string, offsetMinutes: number) => void;
+  setBookmarkNotificationId: (sessionId: string, notificationId?: string) => void;
 };
 
 export const useBookmarkStore = create(
   persist<BookmarkState>(
     (set) => ({
       bookmarks: [],
-      toggleBookmarked: (sessionId: string, notificationId?: string) => {
+      toggleBookmarked: (
+        sessionId: string,
+        notificationId?: string,
+        offsetMinutes?: number,
+      ) => {
         set((state) => {
           if (state.bookmarks.find((b) => b.sessionId === sessionId)) {
             const newBookmarks = state.bookmarks.filter(
@@ -22,10 +36,32 @@ export const useBookmarkStore = create(
             };
           } else {
             return {
-              bookmarks: [...state.bookmarks, { sessionId, notificationId }],
+              bookmarks: [
+                ...state.bookmarks,
+                {
+                  sessionId,
+                  notificationId,
+                  offsetMinutes:
+                    offsetMinutes ?? 10, // default 10 minutes before
+                },
+              ],
             };
           }
         });
+      },
+      setReminderOffset: (sessionId: string, offsetMinutes: number) => {
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) =>
+            b.sessionId === sessionId ? { ...b, offsetMinutes } : b,
+          ),
+        }));
+      },
+      setBookmarkNotificationId: (sessionId: string, notificationId?: string) => {
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) =>
+            b.sessionId === sessionId ? { ...b, notificationId } : b,
+          ),
+        }));
       },
     }),
     {

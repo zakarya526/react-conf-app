@@ -8,16 +8,21 @@ import { useReactConfStore } from "@/store/reactConfStore";
 import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotificationsAsync";
 import { formatSession } from "@/utils/sessions";
 import { Session } from "@/types";
+import { differenceInMinutes } from "date-fns";
 
 export function useBookmark() {
   const toggleBookmarked = useBookmarkStore((state) => state.toggleBookmarked);
   const bookmarks = useBookmarkStore((state) => state.bookmarks);
+  const setReminderOffset = useBookmarkStore((state) => state.setReminderOffset);
   const allSessions = useReactConfStore((state) => state.allSessions);
 
-  const scheduleNotification = async (session: Session) => {
-    const fiveMinutesTillSession = subMinutes(new Date(session.startsAt), 5);
+  const scheduleNotification = async (
+    session: Session,
+    offsetMinutes: number,
+  ) => {
+    const whenToNotify = subMinutes(new Date(session.startsAt), offsetMinutes);
 
-    if (isPast(fiveMinutesTillSession)) {
+    if (isPast(whenToNotify)) {
       return undefined;
     }
 
@@ -26,14 +31,14 @@ export function useBookmark() {
     if (status === "granted") {
       return Notifications.scheduleNotificationAsync({
         content: {
-          title: `"${session.title}" starts in 5 minutes`,
+          title: `"${session.title}" starts in ${offsetMinutes} minutes`,
           data: {
             url: `/talk/${session.id}`,
           },
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,
-          date: fiveMinutesTillSession,
+          date: whenToNotify,
         },
       });
     }
@@ -45,6 +50,13 @@ export function useBookmark() {
     }
 
     const currentBookmark = bookmarks.find((b) => b.sessionId === session.id);
+    // If session starts sooner than our default offset, schedule at start time (offset 0)
+    const minutesUntilStart = Math.max(
+      0,
+      differenceInMinutes(new Date(session.startsAt), new Date()),
+    );
+    const offset =
+      currentBookmark?.offsetMinutes ?? (minutesUntilStart < 10 ? 0 : 10);
 
     if (currentBookmark) {
       // Remove bookmark and cancel notification
@@ -56,8 +68,8 @@ export function useBookmark() {
       toggleBookmarked(session.id);
     } else {
       // Add bookmark and schedule notification
-      const notificationId = await scheduleNotification(session);
-      toggleBookmarked(session.id, notificationId);
+      const notificationId = await scheduleNotification(session, offset);
+      toggleBookmarked(session.id, notificationId, offset);
     }
   };
 
@@ -93,5 +105,6 @@ export function useBookmark() {
     getBookmark,
     getSessionById,
     bookmarks,
+    setReminderOffset,
   };
 }
