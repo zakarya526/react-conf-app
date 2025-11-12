@@ -140,7 +140,7 @@ export const useReactConfStore = create(
                 await Promise.all(
                   bookmarks.map(async (b) => {
                     const apiSession = allSessions.sessions.find(
-                      (s) => s.id === b.sessionId,
+                      (s: Session) => s.id === b.sessionId,
                     );
                     if (!apiSession) return;
                     const session: Session = formatSession(

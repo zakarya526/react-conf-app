@@ -71,6 +71,7 @@ const config: ExpoConfig = {
     eas: {
       projectId: EAS_PROJECT_ID,
     },
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   },
   owner: EAS_APP_OWNER,
   plugins: [

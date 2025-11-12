@@ -127,6 +127,23 @@ export default function TabLayout() {
         })}
         <Label selectedStyle={labelSelectedStyle}>Speakers</Label>
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="assistant">
+        {Platform.select({
+          ios: <Icon sf="sparkles" selectedColor={tintColor} />,
+          android: (
+            <Icon
+              src={
+                <VectorIcon
+                  family={MaterialCommunityIcons as VectorIconFamily}
+                  name="robot"
+                />
+              }
+              selectedColor={tintColor}
+            />
+          ),
+        })}
+        <Label selectedStyle={labelSelectedStyle}>Assistant</Label>
+      </NativeTabs.Trigger>
       <NativeTabs.Trigger name="info">
         {Platform.select({
           ios: <Icon sf="map" selectedColor={tintColor} />,
