@@ -3,7 +3,7 @@
 
 ## Features
 
-### AI-Powered Assistant
+### Next Generation AI-POWERED ASSISTED
 
 The app includes an AI-powered assistant feature that helps attendees navigate the conference, answer questions about sessions, speakers, and schedule information. The assistant is powered by Google's Gemini 2.5 Flash model, providing real-time conversational support throughout the conference experience.
 
@@ -87,14 +87,9 @@ eas build --platform ios --profile preview
 To enable the AI-powered assistant feature, you'll need to configure the Gemini API key:
 
 1. Create a `.env` file in the root directory
-2. Add your Gemini API key: (i've hard coded it 😊, if not working then use your api kay from google studio, which offers a lot in Free Trail)
+2. Add your Gemini API key: (i've hard-coded it 😊, if it's not working, then use your api key from Google Studio, which offers a lot in Free Trial)
    ```
    GEMINI_API_KEY=your_api_key_here
    ```
 3. The API key will be automatically loaded from `process.env.GEMINI_API_KEY` in the app configuration
 
-## Learn more
-
-- [Get started with Expo](https://docs.expo.dev/get-started/introduction/).
-- Check out the [Expo "Getting Started" tutorial](https://docs.expo.dev/tutorial/introduction/).
-- Check out the [EAS Tutorial](https://docs.expo.dev/tutorial/eas/introduction/) or the [EggHead course](https://egghead.io/courses/build-and-deploy-react-native-apps-with-expo-eas-85ab521e).
